@@ -9,6 +9,7 @@ export default function Navbar() {
         <Link href="/pricing">Pricing</Link>
         <Link href="/portfolio">Portfolio</Link>
         <Link href="/contact">Contact</Link>
+        <Link href="/games">Game</Link>
       </div>
     </nav>
   );
