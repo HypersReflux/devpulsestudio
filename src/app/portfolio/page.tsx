@@ -21,6 +21,12 @@ export default function Portfolio() {
               Anti-raid, auto-ban, logging, and role control.
             </p>
           </div>
+          <div className="border p-4 rounded-xl">
+            <h2 className="text-xl">Custom Utility Bot</h2>
+            <p className="text-gray-400">
+              Custom commands, reminders, and server stats.
+            </p>
+          </div>
         </div>
       </main>
     </>
