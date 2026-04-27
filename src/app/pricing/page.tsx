@@ -21,7 +21,6 @@ export default function Pricing() {
           price="$100"
           features={[
             "Everything in Basic",
-            "Music system",
             "Custom commands",
           ]}
         />
