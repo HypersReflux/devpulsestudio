@@ -8,6 +8,7 @@ export default function Contact() {
   const { data: session } = useSession();
 
   const [form, setForm] = useState({
+    email: "",
     details: "",
     plan: "basic",
   });
@@ -36,8 +37,8 @@ export default function Contact() {
     setLoading(false);
 
     if (res.ok) {
-      alert("✅ Order sent! Check your Discord.");
-      setForm({ details: "", plan: "basic" });
+      alert("✅ Order sent! I'll contact you soon.");
+      setForm({ email: "", details: "", plan: "basic" });
     } else {
       alert("❌ Something went wrong.");
     }
@@ -56,6 +57,19 @@ export default function Contact() {
         )}
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+
+          {/* 🔥 NEW EMAIL FIELD */}
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+            placeholder="Your Email (backup contact)"
+            className="p-3 bg-black border border-gray-700 rounded"
+            required
+          />
+
           <select
             value={form.plan}
             onChange={(e) =>

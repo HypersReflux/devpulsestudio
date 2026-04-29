@@ -10,7 +10,12 @@ export async function POST(req: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { details, plan } = await req.json();
+    const { details, plan, email } = await req.json();
+
+    // Basic validation
+    if (!details || !plan || !email) {
+      return Response.json({ error: "Missing fields" }, { status: 400 });
+    }
 
     // Plan → Price mapping
     let price = "$0";
@@ -32,8 +37,13 @@ export async function POST(req: Request) {
             color: 0xff003c,
             fields: [
               {
-                name: "👤 User",
+                name: "👤 Discord User",
                 value: user?.name || "Unknown",
+                inline: true,
+              },
+              {
+                name: "📧 Email",
+                value: email,
                 inline: true,
               },
               {
