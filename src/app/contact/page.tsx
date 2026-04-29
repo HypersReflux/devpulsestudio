@@ -2,10 +2,12 @@
 
 import Navbar from "@/components/Navbar";
 import { useState } from "react";
+import { useSession, signIn } from "next-auth/react";
 
 export default function Contact() {
+  const { data: session } = useSession();
+
   const [form, setForm] = useState({
-    username: "",
     details: "",
     plan: "basic",
   });
@@ -14,6 +16,13 @@ export default function Contact() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    // 🔴 Require login
+    if (!session) {
+      signIn("discord");
+      return;
+    }
+
     setLoading(true);
 
     const res = await fetch("/api/order", {
@@ -28,7 +37,7 @@ export default function Contact() {
 
     if (res.ok) {
       alert("✅ Order sent! Check your Discord.");
-      setForm({ username: "", details: "", plan: "basic" });
+      setForm({ details: "", plan: "basic" });
     } else {
       alert("❌ Something went wrong.");
     }
@@ -40,17 +49,13 @@ export default function Contact() {
       <main className="p-10 max-w-xl mx-auto">
         <h1 className="text-4xl font-bold">Order a Bot</h1>
 
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-          <input
-            value={form.username}
-            onChange={(e) =>
-              setForm({ ...form, username: e.target.value })
-            }
-            placeholder="Your Discord Username"
-            className="p-3 bg-black border border-gray-700 rounded"
-            required
-          />
+        {session && (
+          <p className="text-green-400 mt-2">
+            Logged in as {session.user?.name}
+          </p>
+        )}
 
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
           <select
             value={form.plan}
             onChange={(e) =>

@@ -1,17 +1,24 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
+
 export async function POST(req: Request) {
   try {
-    const { username, details, plan } = await req.json();
+    const session = await getServerSession(authOptions);
 
-    // Basic validation
-    if (!username || !details || !plan) {
-      return Response.json({ error: "Missing fields" }, { status: 400 });
+    // 🔴 Require login
+    if (!session) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const { details, plan } = await req.json();
 
     // Plan → Price mapping
     let price = "$0";
     if (plan === "basic") price = "$50";
     if (plan === "advanced") price = "$100";
     if (plan === "premium") price = "$150";
+
+    const user = session.user;
 
     const response = await fetch(process.env.DISCORD_WEBHOOK_URL!, {
       method: "POST",
@@ -26,7 +33,7 @@ export async function POST(req: Request) {
             fields: [
               {
                 name: "👤 User",
-                value: username,
+                value: user?.name || "Unknown",
                 inline: true,
               },
               {
@@ -49,7 +56,6 @@ export async function POST(req: Request) {
     });
 
     if (!response.ok) {
-      console.error("Discord webhook failed");
       return Response.json({ error: "Webhook failed" }, { status: 500 });
     }
 
