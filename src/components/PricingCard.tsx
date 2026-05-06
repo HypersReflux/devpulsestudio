@@ -15,10 +15,6 @@ export default function PricingCard({ title, price, features }: Props) {
           <li key={i}>• {f}</li>
         ))}
       </ul>
-
-      <button className="mt-6 w-full bg-green-500 py-2 rounded-xl hover:bg-green-600">
-        Order Now
-      </button>
     </div>
   );
 }
